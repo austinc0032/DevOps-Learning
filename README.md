@@ -5,7 +5,7 @@
 
 ## Current Progress
 - [x] Git basics
-- [x] Programming languages (Python basics)
+- [ ] Programming languages (Python basics)
 - [ ] Docker fundamentals
 - [ ] Kubernetes intro
 
