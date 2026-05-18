@@ -1,0 +1,41 @@
+{% extends 'base.html' %}
+{% block content %}
+<div class="d-flex justify-content-between align-items-center mb-3">
+  <div>
+    <h2>Dashboard</h2>
+    <p class="mb-0">Hello, {{ current_user.name }}. {% if current_user.is_admin() %}Admin view shows all tickets.{% else %}You can view and manage your own tickets here.{% endif %}</p>
+  </div>
+  <div><a class="btn btn-primary" href="{{ url_for('create_ticket') }}">Submit New Ticket</a></div>
+</div>
+
+{% if tickets %}
+<div class="table-responsive">
+  <table class="table table-hover align-middle">
+    <thead>
+      <tr>
+        <th>#</th>
+        <th>Title</th>
+        <th>Status</th>
+        <th>Owner</th>
+        <th>Updated</th>
+        <th></th>
+      </tr>
+    </thead>
+    <tbody>
+      {% for ticket in tickets %}
+      <tr>
+        <td>{{ ticket.id }}</td>
+        <td>{{ ticket.title }}</td>
+        <td>{{ ticket.status }}</td>
+        <td>{{ ticket.creator.name }}</td>
+        <td>{{ ticket.updated_at.strftime('%Y-%m-%d %H:%M') }}</td>
+        <td><a class="btn btn-sm btn-outline-secondary" href="{{ url_for('ticket_detail', ticket_id=ticket.id) }}">View</a></td>
+      </tr>
+      {% endfor %}
+    </tbody>
+  </table>
+</div>
+{% else %}
+<div class="alert alert-info">No tickets yet. Use the button above to create your first ticket.</div>
+{% endif %}
+{% endblock %}

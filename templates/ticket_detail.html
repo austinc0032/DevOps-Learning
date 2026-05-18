@@ -1,0 +1,65 @@
+{% extends 'base.html' %}
+{% block content %}
+<div class="row">
+  <div class="col-md-8">
+    <div class="card shadow-sm mb-4">
+      <div class="card-body">
+        <div class="d-flex justify-content-between align-items-start">
+          <div>
+            <h3 class="card-title">Ticket #{{ ticket.id }}</h3>
+            <p class="text-muted mb-1">Submitted by {{ ticket.creator.name }} &middot; {{ ticket.created_at.strftime('%Y-%m-%d %H:%M') }}</p>
+            <span class="badge bg-info text-dark">{{ ticket.status }}</span>
+          </div>
+          <a href="{{ url_for('dashboard') }}" class="btn btn-outline-secondary">Back</a>
+        </div>
+        <hr>
+        <h5>{{ ticket.title }}</h5>
+        <p>{{ ticket.description }}</p>
+      </div>
+    </div>
+
+    <div class="card shadow-sm mb-4">
+      <div class="card-body">
+        <h5 class="card-title">Comments</h5>
+        {% if comments %}
+        <ul class="list-group list-group-flush">
+          {% for comment in comments %}
+          <li class="list-group-item">
+            <div class="d-flex justify-content-between">
+              <strong>{{ comment.author.name }}</strong>
+              <small class="text-muted">{{ comment.created_at.strftime('%Y-%m-%d %H:%M') }}</small>
+            </div>
+            <p class="mb-0">{{ comment.body }}</p>
+          </li>
+          {% endfor %}
+        </ul>
+        {% else %}
+        <div class="alert alert-secondary mb-0">No comments yet.</div>
+        {% endif %}
+      </div>
+    </div>
+  </div>
+
+  {% if current_user.is_admin() %}
+  <div class="col-md-4">
+    <div class="card shadow-sm">
+      <div class="card-body">
+        <h5 class="card-title">Update Ticket</h5>
+        <form method="post">
+          {{ update_form.hidden_tag() }}
+          <div class="mb-3">
+            {{ update_form.status.label(class_='form-label') }}
+            {{ update_form.status(class_='form-select') }}
+          </div>
+          <div class="mb-3">
+            {{ update_form.comment.label(class_='form-label') }}
+            {{ update_form.comment(class_='form-control', rows=5) }}
+          </div>
+          <button type="submit" class="btn btn-primary">Save Update</button>
+        </form>
+      </div>
+    </div>
+  </div>
+  {% endif %}
+</div>
+{% endblock %}
